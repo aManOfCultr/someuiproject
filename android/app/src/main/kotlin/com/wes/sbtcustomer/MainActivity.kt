@@ -1,0 +1,5 @@
+package com.wes.sbtcustomer
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity()
