@@ -11,6 +11,7 @@ class AppTheme {
       );
   static final darkThemeMode = ThemeData.dark().copyWith(
     scaffoldBackgroundColor: Pallete.backgroundColor,
+    drawerTheme: DrawerThemeData(backgroundColor: Pallete.backgroundColor),
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: EdgeInsets.all(27),
       enabledBorder: _border(Pallete.borderColor),
@@ -19,6 +20,7 @@ class AppTheme {
   );
   static final lightThemeMode = ThemeData.dark().copyWith(
     scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255),
+    drawerTheme: DrawerThemeData(backgroundColor: const Color.fromARGB(255, 255, 255, 255)),
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: EdgeInsets.all(27),
       enabledBorder: _border(Pallete.borderColor),

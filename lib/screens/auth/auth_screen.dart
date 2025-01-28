@@ -31,10 +31,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     final themeMode = ref.watch(themeNotifierProvider);
 
     // Determine if it's dark mode
-    final isDarkMode = themeMode == ThemeMode.system
-        ? WidgetsBinding.instance.platformDispatcher.platformBrightness ==
-            Brightness.dark
-        : themeMode == ThemeMode.dark;
+    final isDarkMode = themeMode == ThemeMode.dark;
 
     return Scaffold(
       body: Stack(

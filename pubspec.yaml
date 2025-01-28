@@ -67,6 +67,16 @@ flutter:
     - assets/img/dark-headerBg.png
     - assets/img/headerBg2.png
     - assets/img/dark-footer.png
+    - assets/img/sbt-logo2.png
+    - assets/img/drawer-icons/contact.png
+    - assets/img/drawer-icons/dispatch.png
+    - assets/img/drawer-icons/feedback.png
+    - assets/img/drawer-icons/help.png
+    - assets/img/drawer-icons/orders.png
+    - assets/img/drawer-icons/payment.png
+    - assets/img/drawer-icons/request.png
+    - assets/img/drawer-icons/setting.png
+    - assets/img/drawer-icons/wallet.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
