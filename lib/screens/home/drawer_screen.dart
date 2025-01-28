@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbtcustomer/core/theme/app_pallete.dart';
 import 'package:sbtcustomer/core/theme/theme_provider.dart';
+import 'package:sbtcustomer/screens/auth/auth_screen.dart';
 import 'package:sbtcustomer/screens/home/widgets/drawer_item.dart';
 
 class DrawerScreen extends ConsumerWidget {
@@ -152,12 +153,19 @@ class DrawerScreen extends ConsumerWidget {
                       label: "Delete Account",
                       onTap: () {}),
                   DrawerItem(
-                      icon: Icon(
-                        Icons.logout,
-                        color: isDarkMode ? Colors.white : Colors.black,
-                      ),
-                      label: "Logout",
-                      onTap: () {}),
+                    icon: Icon(
+                      Icons.logout,
+                      color: isDarkMode ? Colors.white : Colors.black,
+                    ),
+                    label: "Logout",
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => AuthScreen(),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
