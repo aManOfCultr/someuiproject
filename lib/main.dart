@@ -3,13 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:sbtcustomer/core/theme/theme.dart';
 import 'package:sbtcustomer/core/theme/theme_provider.dart';
-import 'package:sbtcustomer/screens/authScreen/auth_screen.dart';
 import 'package:sbtcustomer/screens/authScreen/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 void main() async {
-   WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferences.getInstance();
   runApp(const ProviderScope(child: MyApp()));
 }

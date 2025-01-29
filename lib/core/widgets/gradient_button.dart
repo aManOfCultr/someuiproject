@@ -8,9 +8,11 @@ class GradientButton extends ConsumerWidget {
     super.key,
     required this.buttonName,
     required this.onTap,
+    this.isProcessing = false,
   });
   final String buttonName;
   final VoidCallback onTap;
+  final bool isProcessing;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,15 +42,17 @@ class GradientButton extends ConsumerWidget {
           shadowColor: Pallete.transparentColor,
           fixedSize: const Size(410, 55),
         ),
-        child: Text(
-          buttonName,
-          style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w600,
-              color: isdarkmode
-                  ? Pallete.lightbackgroundColor
-                  : Pallete.backgroundColor),
-        ),
+        child: isProcessing
+            ? CircularProgressIndicator.adaptive()
+            : Text(
+                buttonName,
+                style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
+                    color: isdarkmode
+                        ? Pallete.darkgradient2
+                        : Pallete.lightbackgroundColor),
+              ),
       ),
     );
   }

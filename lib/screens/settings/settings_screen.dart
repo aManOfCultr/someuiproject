@@ -9,8 +9,11 @@ import 'package:sbtcustomer/services/urls.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 // Platform-specific toggle widget
-Widget platformToggle({required bool value, required Function(bool) onChanged}) {
+Widget platformToggle(
+    {required bool value, required Function(bool) onChanged}) {
   return Platform.isIOS
       ? CupertinoSwitch(value: value, onChanged: onChanged)
       : Switch(value: value, onChanged: onChanged);
@@ -40,7 +43,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       final response = await http.post(
         Uri.parse(Urls().buildUrl('getCustomerPin')),
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: {'pin': Urls.pin, 'customer_id': "123"}, // Replace with actual customer_id
+        body: {
+          'pin': Urls.pin,
+          'customer_id': "123"
+        }, // Replace with actual customer_id
       );
 
       if (response.statusCode == 200) {
@@ -54,6 +60,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         }
       }
     } catch (e) {
+      showSnackbar(
+          message: "An error occured while fetching pin: $e",
+          backgroundColor: Pallete.errorColor);
       setState(() {
         isLoading = false;
       });
@@ -61,7 +70,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   Future<void> changePin() async {
-    if (_pinController.text.length != 4) return;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final customerId = prefs.getString('customer_id');
+    if (_pinController.text.length != 4) {
+      showSnackbar(
+        message: "Pin must be 4 digits long",
+        backgroundColor: Pallete.errorColor,
+      );
+      return;
+    }
 
     try {
       final response = await http.post(
@@ -69,22 +86,32 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         body: {
           'pin': Urls.pin,
-          'customer_id': "123", // Replace with actual customer_id
+          'customer_id': customerId, // Replace with actual customer_id
           'login_pin': _pinController.text
         },
       );
-
+      print(response.body);
       final responseJson = json.decode(response.body);
-      if (responseJson['status']) {
+      if (responseJson['status'] == true) {
         setState(() {
-          pin = _pinController.text;
+          _pinController.clear();
           isEditingPin = false;
         });
+        showSnackbar(
+          message: responseJson['message'],
+          backgroundColor: Pallete.greenColor,
+        );
       } else {
-        showErrorDialog();
+        showSnackbar(
+          message: responseJson['message'],
+          backgroundColor: Pallete.errorColor,
+        );
       }
     } catch (e) {
-      showErrorDialog();
+      showSnackbar(
+        message: 'An error occured: $e',
+        backgroundColor: Pallete.errorColor,
+      );
     }
   }
 
@@ -95,7 +122,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         title: const Text("Operation Failed"),
         content: const Text("Something went wrong, please try again later."),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text("OK")),
+          TextButton(
+              onPressed: () => Navigator.pop(context), child: const Text("OK")),
         ],
       ),
     );
@@ -111,7 +139,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         backgroundColor: isDarkMode ? Pallete.darkgradient1 : Pallete.gradient1,
         title: const Text(
           'Settings',
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+              fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
       body: Stack(
@@ -121,8 +150,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             left: 0,
             right: 0,
             child: isDarkMode
-                ? Image.asset('assets/img/dark-footer.png', fit: BoxFit.cover, height: 100)
-                : Image.asset('assets/img/footer.png', fit: BoxFit.cover, height: 100),
+                ? Image.asset('assets/img/dark-footer.png',
+                    fit: BoxFit.cover, height: 100)
+                : Image.asset('assets/img/footer.png',
+                    fit: BoxFit.cover, height: 100),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -135,7 +166,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   children: [
                     Expanded(
                       child: CustomField(
-                        icon: Icons.pin,
+                        icon: Icons.password,
                         hintText: 'Pin Number',
                         controller: _pinController,
                         keyboardType: TextInputType.number,
@@ -144,7 +175,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(isEditingPin ? Icons.check : Icons.edit, color: isDarkMode ? Colors.white : Colors.black),
+                      icon: Icon(isEditingPin ? Icons.check : Icons.edit,
+                          color: isDarkMode ? Colors.white : Colors.black),
                       onPressed: () {
                         if (isEditingPin) {
                           changePin();
@@ -160,28 +192,37 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const SizedBox(height: 16),
                 Container(
                   decoration: BoxDecoration(
-                    color: isDarkMode ? Pallete.darkgradient1 : Colors.grey[200],
+                    color:
+                        isDarkMode ? Pallete.darkgradient1 : Colors.grey[200],
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 8),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 2, vertical: 8),
                   child: ListTile(
-                    title: Text('Dark Mode', style: TextStyle(color: isDarkMode ? Colors.white : Colors.black)),
+                    title: Text('Dark Mode',
+                        style: TextStyle(
+                            color: isDarkMode ? Colors.white : Colors.black)),
                     trailing: platformToggle(
                       value: isDarkMode,
                       onChanged: (bool value) {
-                        ref.read(themeNotifierProvider.notifier).setThemeMode(value ? ThemeMode.dark : ThemeMode.light);
+                        ref.read(themeNotifierProvider.notifier).setThemeMode(
+                            value ? ThemeMode.dark : ThemeMode.light);
                       },
                     ),
                   ),
                 ),
                 Container(
                   decoration: BoxDecoration(
-                    color: isDarkMode ? Pallete.darkgradient1 : Colors.grey[200],
+                    color:
+                        isDarkMode ? Pallete.darkgradient1 : Colors.grey[200],
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
                   child: ListTile(
-                    title: Text('Enable Notifications', style: TextStyle(color: isDarkMode ? Colors.white : Colors.black)),
+                    title: Text('Enable Notifications',
+                        style: TextStyle(
+                            color: isDarkMode ? Colors.white : Colors.black)),
                     trailing: platformToggle(
                       value: false,
                       onChanged: (bool value) {},
@@ -189,13 +230,41 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   ),
                 ),
                 ListTile(
-                  title: Text('App Version', style: TextStyle(color: isDarkMode ? Colors.white : Colors.black)),
-                  trailing: Text('2.3', style: TextStyle(color: isDarkMode ? Colors.white : Colors.black)),
+                  title: Text('App Version',
+                      style: TextStyle(
+                          color: isDarkMode ? Colors.white : Colors.black)),
+                  trailing: Text('2.3',
+                      style: TextStyle(
+                          color: isDarkMode ? Colors.white : Colors.black)),
                 ),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void showSnackbar({
+    // required BuildContext context,
+    required String message,
+    required Color backgroundColor,
+  }) {
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.clearSnackBars();
+    // Clear any existing SnackBars
+    messenger.hideCurrentSnackBar();
+
+    // Show new SnackBar
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(color: Colors.white, fontSize: 16),
+        ),
+        backgroundColor: backgroundColor,
+        duration: const Duration(seconds: 3),
+        behavior: SnackBarBehavior.floating, // Makes it float above bottom bars
       ),
     );
   }

@@ -27,8 +27,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   Future<void> getLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await Future.delayed(Durations.extralong4);
-    if (prefs.getString('authenticated') == null ||
-        prefs.getString('authenticated')!.toLowerCase() == 'false') {
+    if (prefs.getBool('authenticated') == null ||
+        !prefs.getBool('authenticated')!) {
       _navigateTo(page: AuthScreen());
     } else {
       _navigateTo(page: HomeScreen());
