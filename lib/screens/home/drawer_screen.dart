@@ -2,8 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbtcustomer/core/theme/app_pallete.dart';
 import 'package:sbtcustomer/core/theme/theme_provider.dart';
-import 'package:sbtcustomer/screens/auth/auth_screen.dart';
+import 'package:sbtcustomer/screens/authScreen/auth_screen.dart';
+import 'package:sbtcustomer/screens/authScreen/splash_screen.dart';
+import 'package:sbtcustomer/screens/contactUs/contact_screen.dart';
+import 'package:sbtcustomer/screens/dipatchStatusScreen/dispatch_status_screen.dart';
+import 'package:sbtcustomer/screens/faqScreen/faq_screen.dart';
+import 'package:sbtcustomer/screens/feedback/feedback_screen.dart';
 import 'package:sbtcustomer/screens/home/widgets/drawer_item.dart';
+import 'package:sbtcustomer/screens/myOrdersScreen/my_order_screen.dart';
+import 'package:sbtcustomer/screens/profile/profile_screen.dart';
+import 'package:sbtcustomer/screens/settings/settings_screen.dart';
+import 'package:sbtcustomer/screens/sampleRequestScreen/sample_request_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DrawerScreen extends ConsumerWidget {
   final String userName;
@@ -79,7 +89,13 @@ class DrawerScreen extends ConsumerWidget {
                         color: isDarkMode ? Colors.white : Colors.black,
                       ),
                       label: "Profile",
-                      onTap: () {}),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(),
+                          ),
+                        );
+                      }),
                   DrawerItem(
                       icon: Image.asset(
                         'assets/img/drawer-icons/orders.png',
@@ -87,7 +103,13 @@ class DrawerScreen extends ConsumerWidget {
                         width: 25,
                       ),
                       label: "Orders",
-                      onTap: () {}),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => MyOrderScreen(),
+                          ),
+                        );
+                      }),
                   DrawerItem(
                       icon: Image.asset(
                         'assets/img/drawer-icons/request.png',
@@ -95,7 +117,13 @@ class DrawerScreen extends ConsumerWidget {
                         width: 25,
                       ),
                       label: "Sample Request",
-                      onTap: () {}),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => SampleRequestScreen(),
+                          ),
+                        );
+                      }),
                   DrawerItem(
                       icon: Image.asset(
                         'assets/img/drawer-icons/dispatch.png',
@@ -103,7 +131,13 @@ class DrawerScreen extends ConsumerWidget {
                         width: 25,
                       ),
                       label: "Dispatch Status",
-                      onTap: () {}),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => DispatchStatusScreen(),
+                          ),
+                        );
+                      }),
                   DrawerItem(
                       icon: Image.asset(
                         'assets/img/drawer-icons/payment.png',
@@ -119,7 +153,13 @@ class DrawerScreen extends ConsumerWidget {
                         width: 25,
                       ),
                       label: "Feedback",
-                      onTap: () {}),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => FeedbackScreen(),
+                          ),
+                        );
+                      }),
                   DrawerItem(
                       icon: Image.asset(
                         'assets/img/drawer-icons/contact.png',
@@ -127,7 +167,13 @@ class DrawerScreen extends ConsumerWidget {
                         width: 25,
                       ),
                       label: "Contact us",
-                      onTap: () {}),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ContactScreen(),
+                          ),
+                        );
+                      }),
                   DrawerItem(
                       icon: Image.asset(
                         'assets/img/drawer-icons/setting.png',
@@ -135,7 +181,13 @@ class DrawerScreen extends ConsumerWidget {
                         width: 25,
                       ),
                       label: "Settings",
-                      onTap: () {}),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => SettingsScreen(),
+                          ),
+                        );
+                      }),
                   DrawerItem(
                       icon: Image.asset(
                         'assets/img/drawer-icons/help.png',
@@ -143,7 +195,13 @@ class DrawerScreen extends ConsumerWidget {
                         width: 25,
                       ),
                       label: "FAQ/Help",
-                      onTap: () {}),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => FAQScreen(),
+                          ),
+                        );
+                      }),
                   DrawerItem(
                       icon: Image.asset(
                         'assets/img/drawer-icons/setting.png',
@@ -151,19 +209,30 @@ class DrawerScreen extends ConsumerWidget {
                         width: 25,
                       ),
                       label: "Delete Account",
-                      onTap: () {}),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => AuthScreen(),
+                          ),
+                        );
+                      }),
                   DrawerItem(
                     icon: Icon(
                       Icons.logout,
                       color: isDarkMode ? Colors.white : Colors.black,
                     ),
                     label: "Logout",
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => AuthScreen(),
-                        ),
-                      );
+                    onTap: () async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.clear();
+                      if (context.mounted) {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => SplashScreen(),
+                          ),
+                        );
+                      }
                     },
                   ),
                 ],

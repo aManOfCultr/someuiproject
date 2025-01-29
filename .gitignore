@@ -36,6 +36,7 @@ macos
 web
 linux
 windows
+/lib/services/urls.dart
 
 # Symbolication related
 app.*.symbols

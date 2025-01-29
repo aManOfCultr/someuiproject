@@ -14,7 +14,7 @@ class AppTheme {
     drawerTheme: DrawerThemeData(backgroundColor: Pallete.backgroundColor),
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: EdgeInsets.all(27),
-      enabledBorder: _border(Pallete.borderColor),
+      enabledBorder: _border(Pallete.darkgradient1),
       focusedBorder: _border(Pallete.gradient2),
     ),
   );
@@ -23,8 +23,8 @@ class AppTheme {
     drawerTheme: DrawerThemeData(backgroundColor: const Color.fromARGB(255, 255, 255, 255)),
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: EdgeInsets.all(27),
-      enabledBorder: _border(Pallete.borderColor),
-      focusedBorder: _border(Pallete.gradient2),
+      enabledBorder: _border(Pallete.gradient2),
+      focusedBorder: _border(Pallete.gradient1),
     ),
   );
 }

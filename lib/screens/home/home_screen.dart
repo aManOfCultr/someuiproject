@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbtcustomer/core/theme/app_pallete.dart';
 import 'package:sbtcustomer/core/theme/theme_provider.dart';
+import 'package:sbtcustomer/screens/dipatchStatusScreen/dispatch_status_screen.dart';
+import 'package:sbtcustomer/screens/feedback/feedback_screen.dart';
 import 'package:sbtcustomer/screens/home/drawer_screen.dart';
 import 'package:sbtcustomer/screens/home/widgets/dashboard_grid.dart';
+import 'package:sbtcustomer/screens/myOrdersScreen/my_order_screen.dart';
+import 'package:sbtcustomer/screens/sampleRequestScreen/sample_request_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -76,15 +80,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ),
                             ),
                             isDarkMode
-                                ? const Image(
-                                    height: 45,
-                                    image: AssetImage(
-                                        'assets/img/new_sbt_dark_logo.png'),
+                                ? Hero(
+                                    tag: 'Dark Logo',
+                                    child: const Image(
+                                      height: 45,
+                                      image: AssetImage(
+                                          'assets/img/new_sbt_dark_logo.png'),
+                                    ),
                                   )
-                                : const Image(
-                                    height: 45,
-                                    image:
-                                        AssetImage('assets/img/sbt-logo2.png'),
+                                : Hero(
+                                    tag: 'Light Logo',
+                                    child: const Image(
+                                      height: 45,
+                                      image: AssetImage(
+                                          'assets/img/new_sbt_logo.png'),
+                                    ),
                                   ),
                           ],
                         ),
@@ -114,29 +124,60 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         child: DashboardGrid(
                           items: [
                             GridItem(
-                                icon: Icons.inventory,
-                                label: "Products",
-                                onTap: () {}),
+                              icon: Icons.inventory,
+                              label: "Products",
+                              onTap: () {
+                                // Navigator.of(context).push(MaterialPageRoute(builder: (context)=> ,),);
+                              },
+                            ),
                             GridItem(
                                 icon: Icons.list,
                                 label: "Orders",
-                                onTap: () {}),
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => MyOrderScreen(),
+                                    ),
+                                  );
+                                }),
                             GridItem(
                                 icon: Icons.attach_money,
                                 label: "Payment Dues",
                                 onTap: () {}),
                             GridItem(
-                                icon: Icons.local_shipping,
-                                label: "Dispatch Status",
-                                onTap: () {}),
+                              icon: Icons.local_shipping,
+                              label: "Dispatch Status",
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        DispatchStatusScreen(),
+                                  ),
+                                );
+                              },
+                            ),
                             GridItem(
-                                icon: Icons.feedback,
-                                label: "Feedback",
-                                onTap: () {}),
+                              icon: Icons.feedback,
+                              label: "Feedback",
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => FeedbackScreen(),
+                                  ),
+                                );
+                              },
+                            ),
                             GridItem(
                                 icon: Icons.request_page,
                                 label: "Sample Request",
-                                onTap: () {}),
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          SampleRequestScreen(),
+                                    ),
+                                  );
+                                }),
                           ],
                         ),
                       ),
